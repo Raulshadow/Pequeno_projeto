@@ -1,4 +1,5 @@
 import request from 'supertest';
+import { getConnection } from 'typeorm';
 import { app } from '../app';
 
 import createConnection from '../database'
@@ -7,6 +8,12 @@ describe("Surveys",() => {
     beforeAll(async () => {
         const conecction = await createConnection();
         await conecction.runMigrations();
+    });
+
+    afterAll(async () => {
+        const connection = getConnection();
+        await connection.dropDatabase();
+        await connection.close();
     });
 
     it("should be able to create a new survey", async () => {
